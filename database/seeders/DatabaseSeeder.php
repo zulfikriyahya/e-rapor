@@ -13,13 +13,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'nama' => 'Super Admin',
+            'name' => 'Super Admin',
             'email' => 'super@admin.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
-            'role' => 'superadmin',
-            'avatar' => '',
+            'role' => 'super_admin',
+            'avatar' => '/storage/avatar/default.png',
         ]);
     }
 }

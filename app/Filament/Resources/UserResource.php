@@ -38,14 +38,14 @@ class UserResource extends Resource
                     ->email()
                     ->rule(fn($record) => $record === null ? 'unique:users,email' : 'unique:users,email,' . $record->id)->dehydrateStateUsing(fn($state) => $state ? $state : null)
                     ->required(),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
+                Forms\Components\DateTimePicker::make('email_verified_at')
+                    ->default(now()),
                 Forms\Components\TextInput::make('password')
                     ->label('Password')
                     ->password()
                     ->required(fn($record) => $record === null) // Required only on create
                     ->dehydrateStateUsing(fn($state, $record) => $state ? bcrypt($state) : $record->password),
-
-                Forms\Components\Select::make('roles')
+                Forms\Components\Select::make('role')
                     ->relationship('roles', 'name')
                     ->multiple()
                     ->preload()
@@ -61,9 +61,8 @@ class UserResource extends Resource
                     ])
                     ->maxSize(1024)
                     ->minSize(10)
-                    ->directory(url('/storage/avatar/'))
-                    ->fetchFileInformation(false)
-                    ->required(),
+                    // ->directory(url('/storage/avatar/'))
+                    ->fetchFileInformation(false),
             ]);
     }
 
@@ -83,8 +82,8 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('roles')
-                    ->searchable(),
+                Tables\Columns\BadgeColumn::make('role')
+                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

@@ -17,12 +17,12 @@ use App\Filament\Resources\UserResource\RelationManagers;
 
 class UserResource extends Resource
 {
-    use HasPageShield;
+    // use HasPageShield;
 
-    protected function getShieldRedirectPath(): string
-    {
-        return '/';
-    }
+    // protected function getShieldRedirectPath(): string
+    // {
+    //     return '/';
+    // }
 
     protected static ?string $model = User::class;
 
@@ -38,14 +38,15 @@ class UserResource extends Resource
                     ->email()
                     ->rule(fn($record) => $record === null ? 'unique:users,email' : 'unique:users,email,' . $record->id)->dehydrateStateUsing(fn($state) => $state ? $state : null)
                     ->required(),
-                Forms\Components\DateTimePicker::make('email_verified_at')
-                    ->default(now()),
+                Forms\Components\DateTimePicker::make('email_verified_at'),
+                // ->default(now())
+                // ->dehydrated(),
                 Forms\Components\TextInput::make('password')
                     ->label('Password')
                     ->password()
                     ->required(fn($record) => $record === null) // Required only on create
                     ->dehydrateStateUsing(fn($state, $record) => $state ? bcrypt($state) : $record->password),
-                Forms\Components\Select::make('role')
+                Forms\Components\Select::make('roles')
                     ->relationship('roles', 'name')
                     ->multiple()
                     ->preload()
@@ -61,7 +62,7 @@ class UserResource extends Resource
                     ])
                     ->maxSize(1024)
                     ->minSize(10)
-                    // ->directory(url('/storage/avatar/'))
+                    ->directory('/avatar/')
                     ->fetchFileInformation(false),
             ]);
     }
@@ -73,7 +74,7 @@ class UserResource extends Resource
                 Tables\Columns\ImageColumn::make('avatar')
                     ->label('Avatar')
                     ->circular()
-                    ->defaultImageUrl(url('/storage/avatar/default.png'))
+                    ->defaultImageUrl(url('/images/avatar/default.png'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
@@ -81,8 +82,9 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email_verified_at')
                     ->dateTime()
+                    ->since()
                     ->sortable(),
-                Tables\Columns\BadgeColumn::make('role')
+                Tables\Columns\BadgeColumn::make('roles.name')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')

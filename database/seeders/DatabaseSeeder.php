@@ -18,8 +18,13 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
-            // 'role' => 'super_admin',
-            // 'avatar' => '/storage/avatar/default.png',
+        ]);
+        User::create([
+            'name' => 'Administrator',
+            'email' => 'admin@admin.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'),
+            'remember_token' => Str::random(10),
         ]);
     }
 }

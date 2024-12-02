@@ -1,15 +1,15 @@
 models:
-  # TahunPelajaran:
-  #   nama: string
-  #   semester_id: integer
-  #   relationships:
-  #     belongsTo: Semester
-  #     hasMany: Penilaian, Nilai
+  TahunPelajaran:
+    nama: string
+    semester_id: integer
+    relationships:
+      belongsTo: Semester
+      hasMany: Penilaian, Nilai
 
-  # Semester:
-  #   nama: string
-  #   relationships:
-  #     hasMany: TahunPelajaran, Penilaian, Nilai
+  Semester:
+    nama: string
+    relationships:
+      hasMany: TahunPelajaran, Penilaian, Nilai
 
   Kelas:
     nama: string

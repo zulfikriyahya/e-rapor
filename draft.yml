@@ -1,0 +1,108 @@
+models:
+  TahunPelajaran:
+    nama: string
+    semester_id: integer
+    relationships:
+      belongsTo: Semester
+      hasMany: Penilaian, Nilai
+
+  Semester:
+    nama: string
+    relationships:
+      hasMany: Penilaian, Nilai
+
+  Kelas:
+    nama: string
+    tingkat_id: integer
+    relationships:
+      belongsTo: Tingkat
+      hasMany: Nilai
+
+  Tingkat:
+    nama: string
+    jenjang_id: integer
+    relationships:
+      belongsTo: Jenjang
+      hasMany: Kelas
+
+  Jenjang:
+    nama: string
+    relationships:
+      hasMany: Tingkat
+
+  Penilaian:
+    nama: string
+    tahun_pelajaran_id: integer
+    semester_id: integer
+    relationships:
+      belongsTo: TahunPelajaran, Semester
+      hasMany: Nilai
+
+  Nilai:
+    kode: string
+    siswa_id: integer
+    nilai_angka: float
+    nilai_huruf: string
+    nilai_ekstrakurikuler_angka: float
+    nilai_ekstrakurikuler_huruf: string
+    penilaian_id: integer
+    mata_pelajaran_id: integer
+    kelas_id: integer
+    tahun_pelajaran_id: integer
+    semester_id: integer
+    ekstrakurikuler_id: integer
+    relationships:
+      belongsTo: Penilaian, MataPelajaran, Kelas, TahunPelajaran, Semester, Ekstrakurikuler
+
+  MataPelajaran:
+    nama: string
+    kode: bigInteger
+    relationships:
+      hasMany: Nilai
+
+  Guru:
+    nama: string
+    foto: string
+    mata_pelajaran_id: integer foreign:mata_pelajaran.id
+    kelas_id: integer foreign:kelas.id
+    jabatan_id: integer foreign:jabatan.id
+    status: boolean
+    user_id: integer foreign:user.id
+
+  Siswa:
+    nama: string
+    nisn: string
+    nipd: string
+    jenis_kelamin: string
+    golongan_darah: string
+    kelas_id: integer foreign:kelas.id
+    tingkat_id: integer foreign:tingkat.id
+    jenjang_id: integer foreign:jenjang.id
+    alamat: string
+    negara_id: integer
+    provinsi_id: integer
+    kabupaten_id: integer
+    kecamatan_id: integer
+    kelurahan_id: integer
+    ekstrakurikuler_id: integer foreign:ekstrakurikuler.id
+    status: boolean
+    user_id: integer foreign:user.id
+    foto: string
+
+  Ekstrakurikuler:
+    nama: string
+    guru_id: integer
+    relationships:
+      belongsTo: Guru
+      hasMany: Nilai
+
+  Jabatan:
+    nama: string
+    relationships:
+      hasMany: Guru
+
+  User:
+    nama: string
+    email: string
+    password: string
+    avatar: string foreign:guru.foto

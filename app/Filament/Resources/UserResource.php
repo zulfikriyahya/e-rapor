@@ -12,17 +12,10 @@ use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use App\Filament\Resources\UserResource\RelationManagers;
 
 class UserResource extends Resource
 {
-    // use HasPageShield;
-
-    // protected function getShieldRedirectPath(): string
-    // {
-    //     return '/';
-    // }
 
     protected static ?string $model = User::class;
 
@@ -38,7 +31,7 @@ class UserResource extends Resource
                     ->email()
                     ->rule(fn($record) => $record === null ? 'unique:users,email' : 'unique:users,email,' . $record->id)->dehydrateStateUsing(fn($state) => $state ? $state : null)
                     ->required(),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
+                // Forms\Components\DateTimePicker::make('email_verified_at'),
                 // ->default(now())
                 // ->dehydrated(),
                 Forms\Components\TextInput::make('password')
@@ -80,19 +73,23 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->since()
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('email_verified_at')
+                //     ->dateTime()
+                //     ->since()
+                //     ->sortable(),
                 Tables\Columns\BadgeColumn::make('roles.name')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Dibuat')
                     ->dateTime()
                     ->sortable()
+                    ->since()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Diperbarui')
                     ->dateTime()
+                    ->since()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

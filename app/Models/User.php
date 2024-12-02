@@ -10,14 +10,13 @@ use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements HasAvatar, FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasRoles, SoftDeletes, HasPanelShield;
+    use HasFactory, Notifiable, HasRoles, SoftDeletes;
 
     public function canAccessPanel(Panel $panel): bool
     {
@@ -37,7 +36,6 @@ class User extends Authenticatable implements HasAvatar, FilamentUser
         'name',
         'email',
         'password',
-        'role',
         'avatar',
     ];
 

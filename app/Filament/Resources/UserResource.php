@@ -77,8 +77,9 @@ class UserResource extends Resource
                 //     ->dateTime()
                 //     ->since()
                 //     ->sortable(),
-                Tables\Columns\BadgeColumn::make('roles.name')
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('roles.name')
+                    ->sortable()
+                    ->badge(),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat')

@@ -6,23 +6,30 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Semester extends Model
+class Kecamatan extends Model
 {
     use HasFactory, SoftDeletes, HasRoles;
     protected $fillable = [
         'nama',
+        'kabupaten_id',
     ];
     protected $casts = [
         'id' => 'integer'
     ];
-    public function tahunPelajaran(): HasMany
+
+    public function kabupaten(): BelongsTo
     {
-        return $this->hasMany(TahunPelajaran::class);
+        return $this->belongsTo(Kabupaten::class);
     }
-    public function ekstrakurikuler(): HasMany
+    public function kelurahan(): HasMany
     {
-        return $this->hasMany(Ekstrakurikuler::class);
+        return $this->hasMany(Kelurahan::class);
+    }
+    public function siswa(): HasMany
+    {
+        return $this->hasMany(Siswa::class);
     }
 }

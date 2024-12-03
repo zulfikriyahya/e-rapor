@@ -16,6 +16,7 @@ use App\Filament\Resources\TahunPelajaranResource\RelationManagers;
 class TahunPelajaranResource extends Resource
 {
     protected static ?string $model = TahunPelajaran::class;
+    protected static ?string $navigationGroup = 'Referensi';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

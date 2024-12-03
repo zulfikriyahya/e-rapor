@@ -4,18 +4,18 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Semester;
+use App\Models\Jenjang;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\SemesterResource\Pages;
+use App\Filament\Resources\JenjangResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\SemesterResource\RelationManagers;
+use App\Filament\Resources\JenjangResource\RelationManagers;
 
-class SemesterResource extends Resource
+class JenjangResource extends Resource
 {
-    protected static ?string $model = Semester::class;
+    protected static ?string $model = Jenjang::class;
     protected static ?string $navigationGroup = 'Referensi';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -69,7 +69,7 @@ class SemesterResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageSemesters::route('/'),
+            'index' => Pages\ManageJenjangs::route('/'),
         ];
     }
 

@@ -4,18 +4,18 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Semester;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\Ekstrakurikuler;
 use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\SemesterResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\SemesterResource\RelationManagers;
+use App\Filament\Resources\EkstrakurikulerResource\Pages;
+use App\Filament\Resources\EkstrakurikulerResource\RelationManagers;
 
-class SemesterResource extends Resource
+class EkstrakurikulerResource extends Resource
 {
-    protected static ?string $model = Semester::class;
+    protected static ?string $model = Ekstrakurikuler::class;
     protected static ?string $navigationGroup = 'Referensi';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -26,6 +26,12 @@ class SemesterResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nama')
                     ->required(),
+                Forms\Components\Select::make('tahun_pelajaran_id')
+                    ->relationship('tahunPelajaran', 'nama')
+                    ->required(),
+                Forms\Components\Select::make('semester_id')
+                    ->relationship('semester', 'nama')
+                    ->required(),
             ]);
     }
 
@@ -35,6 +41,10 @@ class SemesterResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('tahunPelajaran.nama')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('semester.nama')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -69,7 +79,7 @@ class SemesterResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageSemesters::route('/'),
+            'index' => Pages\ManageEkstrakurikulers::route('/'),
         ];
     }
 

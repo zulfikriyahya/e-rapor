@@ -4,18 +4,18 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Semester;
+use App\Models\Kelas;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\SemesterResource\Pages;
+use App\Filament\Resources\KelasResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\SemesterResource\RelationManagers;
+use App\Filament\Resources\KelasResource\RelationManagers;
 
-class SemesterResource extends Resource
+class KelasResource extends Resource
 {
-    protected static ?string $model = Semester::class;
+    protected static ?string $model = Kelas::class;
     protected static ?string $navigationGroup = 'Referensi';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -26,6 +26,12 @@ class SemesterResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nama')
                     ->required(),
+                Forms\Components\Select::make('tingkat_id')
+                    ->relationship('tingkat', 'nama')
+                    ->required(),
+                Forms\Components\Select::make('tahun_pelajaran_id')
+                    ->relationship('tahunPelajaran', 'nama')
+                    ->required(),
             ]);
     }
 
@@ -35,6 +41,10 @@ class SemesterResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('tingkat.nama')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('tahunPelajaran.nama')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -69,7 +79,7 @@ class SemesterResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageSemesters::route('/'),
+            'index' => Pages\ManageKelas::route('/'),
         ];
     }
 

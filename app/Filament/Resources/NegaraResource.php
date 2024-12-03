@@ -4,19 +4,19 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Semester;
+use App\Models\Negara;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\SemesterResource\Pages;
+use App\Filament\Resources\NegaraResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\SemesterResource\RelationManagers;
+use App\Filament\Resources\NegaraResource\RelationManagers;
 
-class SemesterResource extends Resource
+class NegaraResource extends Resource
 {
-    protected static ?string $model = Semester::class;
-    protected static ?string $navigationGroup = 'Referensi';
+    protected static ?string $model = Negara::class;
+    protected static ?string $navigationGroup = 'Wilayah';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -69,7 +69,7 @@ class SemesterResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageSemesters::route('/'),
+            'index' => Pages\ManageNegaras::route('/'),
         ];
     }
 

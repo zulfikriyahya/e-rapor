@@ -29,7 +29,27 @@ class Siswa extends Model
         'status',
         'foto',
     ];
-    protected $casts = [];
+    protected $casts = ['id' => 'integer'];
+    public function negara(): BelongsTo
+    {
+        return $this->belongsTo(Negara::class);
+    }
+    public function provinsi(): BelongsTo
+    {
+        return $this->belongsTo(Provinsi::class);
+    }
+    public function kabupaten(): BelongsTo
+    {
+        return $this->belongsTo(Kabupaten::class);
+    }
+    public function kecamatan(): BelongsTo
+    {
+        return $this->belongsTo(Kecamatan::class);
+    }
+    public function kelurahan(): BelongsTo
+    {
+        return $this->belongsTo(Kelurahan::class);
+    }
     public function kelas(): BelongsTo
     {
         return $this->belongsTo(Kelas::class);

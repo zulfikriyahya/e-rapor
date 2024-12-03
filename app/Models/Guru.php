@@ -33,6 +33,7 @@ class Guru extends Model
     {
         return $this->belongsTo(Jabatan::class);
     }
+
     public function nilai(): HasMany
     {
         return $this->hasMany(Nilai::class);

@@ -4,18 +4,18 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Semester;
+use App\Models\Tingkat;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\SemesterResource\Pages;
+use App\Filament\Resources\TingkatResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\SemesterResource\RelationManagers;
+use App\Filament\Resources\TingkatResource\RelationManagers;
 
-class SemesterResource extends Resource
+class TingkatResource extends Resource
 {
-    protected static ?string $model = Semester::class;
+    protected static ?string $model = Tingkat::class;
     protected static ?string $navigationGroup = 'Referensi';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -26,6 +26,9 @@ class SemesterResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nama')
                     ->required(),
+                Forms\Components\Select::make('jenjang_id')
+                    ->relationship('jenjang', 'nama')
+                    ->required(),
             ]);
     }
 
@@ -35,6 +38,9 @@ class SemesterResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('jenjang.nama')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -69,7 +75,7 @@ class SemesterResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageSemesters::route('/'),
+            'index' => Pages\ManageTingkats::route('/'),
         ];
     }
 

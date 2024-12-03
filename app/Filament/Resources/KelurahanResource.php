@@ -4,19 +4,19 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Semester;
 use Filament\Forms\Form;
+use App\Models\Kelurahan;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\SemesterResource\Pages;
+use App\Filament\Resources\KelurahanResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\SemesterResource\RelationManagers;
+use App\Filament\Resources\KelurahanResource\RelationManagers;
 
-class SemesterResource extends Resource
+class KelurahanResource extends Resource
 {
-    protected static ?string $model = Semester::class;
-    protected static ?string $navigationGroup = 'Referensi';
+    protected static ?string $model = Kelurahan::class;
+    protected static ?string $navigationGroup = 'Wilayah';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -25,6 +25,9 @@ class SemesterResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nama')
+                    ->required(),
+                Forms\Components\Select::make('kecamatan_id')
+                    ->relationship('kecamatan', 'nama')
                     ->required(),
             ]);
     }
@@ -35,6 +38,8 @@ class SemesterResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('kecamatan.nama')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -69,7 +74,7 @@ class SemesterResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageSemesters::route('/'),
+            'index' => Pages\ManageKelurahans::route('/'),
         ];
     }
 

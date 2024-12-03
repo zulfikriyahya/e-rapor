@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Semester extends Model
+class Negara extends Model
 {
     use HasFactory, SoftDeletes, HasRoles;
     protected $fillable = [
@@ -17,12 +17,13 @@ class Semester extends Model
     protected $casts = [
         'id' => 'integer'
     ];
-    public function tahunPelajaran(): HasMany
+
+    public function provinsi(): HasMany
     {
-        return $this->hasMany(TahunPelajaran::class);
+        return $this->hasMany(Provinsi::class);
     }
-    public function ekstrakurikuler(): HasMany
+    public function siswa(): HasMany
     {
-        return $this->hasMany(Ekstrakurikuler::class);
+        return $this->hasMany(Siswa::class);
     }
 }

@@ -16,6 +16,7 @@ class Ekstrakurikuler extends Model
         'nama',
         'guru_id',
         'tahun_pelajaran_id',
+        'semester_id',
     ];
     protected $casts = [
         'id' => 'integer',
@@ -23,6 +24,10 @@ class Ekstrakurikuler extends Model
     public function tahunPelajaran(): BelongsTo
     {
         return $this->belongsTo(TahunPelajaran::class);
+    }
+    public function semester(): BelongsTo
+    {
+        return $this->belongsTo(Semester::class);
     }
     public function guru(): BelongsTo
     {

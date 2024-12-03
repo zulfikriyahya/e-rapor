@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TahunPelajaranResource\Pages;
+use App\Filament\Resources\TahunPelajaranResource\RelationManagers;
 use App\Models\TahunPelajaran;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -16,8 +17,6 @@ class TahunPelajaranResource extends Resource
 {
     protected static ?string $model = TahunPelajaran::class;
 
-    protected static ?string $navigationGroup = 'Referensi';
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -26,8 +25,11 @@ class TahunPelajaranResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nama')
                     ->required(),
-                Forms\Components\Select::make('semester_id')
-                    ->relationship('semester', 'nama')
+                Forms\Components\TextInput::make('semester')
+                    ->required(),
+                Forms\Components\TextInput::make('tempat_pembagian_rapor')
+                    ->required(),
+                Forms\Components\DatePicker::make('tanggal_pembagian_rapor')
                     ->required(),
             ]);
     }
@@ -38,8 +40,12 @@ class TahunPelajaranResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('semester.nama')
-                    ->badge()
+                Tables\Columns\TextColumn::make('semester')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('tempat_pembagian_rapor')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('tanggal_pembagian_rapor')
+                    ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
@@ -59,9 +65,6 @@ class TahunPelajaranResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -72,10 +75,19 @@ class TahunPelajaranResource extends Resource
             ]);
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageTahunPelajarans::route('/'),
+            'index' => Pages\ListTahunPelajarans::route('/'),
+            'create' => Pages\CreateTahunPelajaran::route('/create'),
+            'edit' => Pages\EditTahunPelajaran::route('/{record}/edit'),
         ];
     }
 

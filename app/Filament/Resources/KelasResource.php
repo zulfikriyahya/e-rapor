@@ -2,21 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\KelasResource\Pages;
-use App\Models\Kelas;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Kelas;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\KelasResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\KelasResource\RelationManagers;
 
 class KelasResource extends Resource
 {
     protected static ?string $model = Kelas::class;
-
-    protected static ?string $navigationGroup = 'Referensi';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -26,9 +25,45 @@ class KelasResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nama')
                     ->required(),
+                Forms\Components\Select::make('guru_id')
+                    ->relationship('guru', 'nama')
+                    ->required()
+                    ->native(false)
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('nama')
+                            ->required(),
+                        Forms\Components\TextInput::make('nik'),
+                        Forms\Components\TextInput::make('nip'),
+                        Forms\Components\TextInput::make('nuptk'),
+                        Forms\Components\TextInput::make('tempat_lahir')
+                            ->required(),
+                        Forms\Components\DatePicker::make('tanggal_lahir')
+                            ->required(),
+                        Forms\Components\TextInput::make('jenis_kelamin')
+                            ->required(),
+                        Forms\Components\TextInput::make('alamat')
+                            ->required(),
+                        Forms\Components\TextInput::make('telepon')
+                            ->tel(),
+                        Forms\Components\TextInput::make('foto'),
+                        Forms\Components\TextInput::make('status')
+                            ->required(),
+                    ]),
                 Forms\Components\Select::make('tingkat_id')
                     ->relationship('tingkat', 'nama')
-                    ->required(),
+                    ->required()
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('nama')
+                            ->required(),
+                        Forms\Components\Select::make('jenjang')
+                            ->required()
+                            ->native(false)
+                            ->options([
+                                'SD/MI',
+                                'SMP/MTs',
+                                'SMA/SMK/MA',
+                            ]),
+                    ]),
                 Forms\Components\Select::make('tahun_pelajaran_id')
                     ->relationship('tahunPelajaran', 'nama')
                     ->required(),
@@ -41,9 +76,14 @@ class KelasResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('guru.nama')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('tingkat.nama')
+                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tahunPelajaran.nama')
+                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
@@ -63,9 +103,6 @@ class KelasResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -76,10 +113,19 @@ class KelasResource extends Resource
             ]);
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageKelas::route('/'),
+            'index' => Pages\ListKelas::route('/'),
+            'create' => Pages\CreateKelas::route('/create'),
+            'edit' => Pages\EditKelas::route('/{record}/edit'),
         ];
     }
 

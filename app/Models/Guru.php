@@ -2,55 +2,57 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Guru extends Model
 {
-    use HasFactory, HasRoles, SoftDeletes;
+    use HasFactory, HasRoles, Notifiable, SoftDeletes;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'nama',
+        'nik',
         'nip',
-        'golongan_darah',
-        'alamat',
-        'negara_id',
-        'provinsi_id',
-        'kabupaten_id',
-        'kecamatan_id',
-        'kelurahan_id',
-        'foto',
+        'nuptk',
+        'tempat_lahir',
+        'tanggal_lahir',
         'jenis_kelamin',
+        'alamat',
+        'telepon',
+        'foto',
         'status',
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
     protected $casts = [
         'id' => 'integer',
+        'tanggal_lahir' => 'date',
     ];
 
-    // public function mataPelajaran(): BelongsTo
-    // {
-    //     return $this->belongsTo(MataPelajaran::class);
-    // }
-    // public function kelas(): BelongsTo
-    // {
-    //     return $this->belongsTo(Kelas::class);
-    // }
-    // public function jabatan(): BelongsTo
-    // {
-    //     return $this->belongsTo(Jabatan::class);
-    // }
-
-    public function nilai(): HasMany
+    public function kelas(): HasMany
     {
-        return $this->hasMany(Nilai::class);
+        return $this->hasMany(Kelas::class);
     }
 
-    public function ekstrakurikuler(): HasMany
+    public function pembelajarans(): HasMany
+    {
+        return $this->hasMany(Pembelajaran::class);
+    }
+
+    public function ekstrakurikulers(): HasMany
     {
         return $this->hasMany(Ekstrakurikuler::class);
     }

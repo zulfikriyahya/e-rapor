@@ -2,72 +2,60 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Siswa extends Model
 {
-    use HasFactory, HasRoles, SoftDeletes;
+    use HasFactory, HasRoles, Notifiable, SoftDeletes;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'nama',
+        'nik',
         'nisn',
         'nipd',
-        'golongan_darah',
-        'alamat',
-        'negara_id',
-        'provinsi_id',
-        'kabupaten_id',
-        'kecamatan_id',
-        'kelurahan_id',
-        'foto',
+        'tempat_lahir',
+        'tanggal_lahir',
         'jenis_kelamin',
+        'agama',
+        'golongan_darah',
+        'status_dalam_keluarga',
+        'anak_ke',
+        'alamat_siswa',
+        'telepon_siswa',
+        'sekolah_asal',
+        'diterima_dikelas',
+        'tanggal_diterima',
+        'nama_ayah',
+        'pekerjaan_ayah',
+        'nama_ibu',
+        'pekerjaan_ibu',
+        'alamat_orang_tua',
+        'telepon_orang_tua',
+        'nama_wali',
+        'pekerjaan_wali',
+        'alamat_wali',
+        'telepon_wali',
         'status',
+        'foto',
     ];
 
-    protected $casts = ['id' => 'integer'];
-
-    public function negara(): BelongsTo
-    {
-        return $this->belongsTo(Negara::class);
-    }
-
-    public function provinsi(): BelongsTo
-    {
-        return $this->belongsTo(Provinsi::class);
-    }
-
-    public function kabupaten(): BelongsTo
-    {
-        return $this->belongsTo(Kabupaten::class);
-    }
-
-    public function kecamatan(): BelongsTo
-    {
-        return $this->belongsTo(Kecamatan::class);
-    }
-
-    public function kelurahan(): BelongsTo
-    {
-        return $this->belongsTo(Kelurahan::class);
-    }
-
-    public function kelas(): BelongsTo
-    {
-        return $this->belongsTo(Kelas::class);
-    }
-
-    public function ekstrakurikuler(): BelongsTo
-    {
-        return $this->belongsTo(Ekstrakurikuler::class);
-    }
-
-    public function nilai(): HasMany
-    {
-        return $this->hasMany(Nilai::class);
-    }
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'tanggal_lahir' => 'date',
+        'tanggal_diterima' => 'date',
+    ];
 }

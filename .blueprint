@@ -1,0 +1,43 @@
+created:
+    - database/factories/TahunPelajaranFactory.php
+    - database/factories/TingkatFactory.php
+    - database/factories/KelasFactory.php
+    - database/factories/GuruFactory.php
+    - database/factories/KelompokMataPelajaranFactory.php
+    - database/factories/MataPelajaranFactory.php
+    - database/factories/PembelajaranFactory.php
+    - database/factories/InstansiFactory.php
+    - database/factories/EkstrakurikulerFactory.php
+    - database/factories/SiswaFactory.php
+    - database/migrations/2024_12_04_043050_create_tahun_pelajarans_table.php
+    - database/migrations/2024_12_04_043051_create_tingkats_table.php
+    - database/migrations/2024_12_04_043052_create_kelas_table.php
+    - database/migrations/2024_12_04_043053_create_gurus_table.php
+    - database/migrations/2024_12_04_043054_create_kelompok_mata_pelajarans_table.php
+    - database/migrations/2024_12_04_043055_create_mata_pelajarans_table.php
+    - database/migrations/2024_12_04_043056_create_pembelajarans_table.php
+    - database/migrations/2024_12_04_043057_create_instansis_table.php
+    - database/migrations/2024_12_04_043058_create_ekstrakurikulers_table.php
+    - database/migrations/2024_12_04_043059_create_siswas_table.php
+    - app/Models/TahunPelajaran.php
+    - app/Models/Tingkat.php
+    - app/Models/Kelas.php
+    - app/Models/Guru.php
+    - app/Models/KelompokMataPelajaran.php
+    - app/Models/MataPelajaran.php
+    - app/Models/Pembelajaran.php
+    - app/Models/Instansi.php
+    - app/Models/Ekstrakurikuler.php
+    - app/Models/Siswa.php
+models:
+    User: { name: string, email: string, email_verified_at: 'datetime nullable', password: string, avatar: 'string nullable', remember_token: 'string nullable' }
+    TahunPelajaran: { nama: string, semester: 'enum:Ganjil,Genap', tempat_pembagian_rapor: string, tanggal_pembagian_rapor: date, relationships: { hasMany: 'Kelas, Ekstrakurikuler' } }
+    Tingkat: { nama: string, jenjang: 'enum:SD/MI,SMP/MTs,SMA/SMK/MA', relationships: { hasMany: Kelas } }
+    Kelas: { nama: string, wali_kelas: string, tingkat: string, tahun_pelajaran: string, relationships: { belongsTo: 'Guru, Tingkat, TahunPelajaran', hasMany: Pembelajaran } }
+    Guru: { nama: string, nik: 'string nullable', nip: 'string nullable', nuptk: 'string nullable', tempat_lahir: string, tanggal_lahir: date, jenis_kelamin: 'enum:Laki-laki,Perempuan', alamat: string, telepon: 'string nullable', foto: 'string nullable', status: 'enum:Aktif,Nonaktif', relationships: { hasMany: 'Kelas, Pembelajaran, Ekstrakurikuler' } }
+    KelompokMataPelajaran: { nama: string, kode: string, relationships: { hasMany: MataPelajaran } }
+    MataPelajaran: { nama: string, kode: string, kelompok: string, relationships: { belongsTo: KelompokMataPelajaran, hasMany: Pembelajaran } }
+    Pembelajaran: { kelas: string, mata_pelajaran: string, guru: string, relationships: { belongsTo: 'MataPelajaran, Guru, Kelas' } }
+    Instansi: { nama: string, npsn: string, nss: 'string nullable', logo: 'string nullable', nama_kepala: string, nip_kepala: 'string nullable', tte_kepala: 'string nullable', status: 'enum:Negeri,Swasta', alamat: string, kode_pos: string, telepon: 'string nullable', email: 'string nullable', website: 'string nullable' }
+    Ekstrakurikuler: { nama: string, pembina: string, tahun_pelajaran: string, semester: 'enum:Ganjil,Genap', relationships: { belongsTo: 'Guru, TahunPelajaran' } }
+    Siswa: { nama: string, nik: 'string nullable', nisn: 'string nullable', nipd: 'string nullable', tempat_lahir: string, tanggal_lahir: date, jenis_kelamin: 'enum:Laki-laki,Perempuan', agama: 'enum:Islam,"Kristen Protestan","Kristen Katholik","Hundu","Buddha","Konghucu"', golongan_darah: 'enum:A+,B+,AB+,O,A-,B-,AB-', status_dalam_keluarga: 'enum:"Anak Kandung","Anak Tiri"', anak_ke: integer, alamat_siswa: string, telepon_siswa: 'string nullable', sekolah_asal: 'string nullable', diterima_dikelas: integer, tanggal_diterima: date, nama_ayah: string, pekerjaan_ayah: string, nama_ibu: string, pekerjaan_ibu: string, alamat_orang_tua: string, telepon_orang_tua: string, nama_wali: 'string nullable', pekerjaan_wali: 'string nullable', alamat_wali: 'string nullable', telepon_wali: 'string nullable', status: 'enum:Aktif,Nonaktif', foto: 'string nullable' }

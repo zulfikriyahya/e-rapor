@@ -2,58 +2,43 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Instansi extends Model
 {
-    use HasFactory, HasRoles, SoftDeletes;
+    use HasFactory, HasRoles, Notifiable, SoftDeletes;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'nama',
         'npsn',
+        'nss',
+        'logo',
         'nama_kepala',
         'nip_kepala',
         'tte_kepala',
-        'alamat',
-        'negara_id',
-        'provinsi_id',
-        'kabupaten_id',
-        'kecamatan_id',
-        'kelurahan_id',
-        'logo',
         'status',
+        'alamat',
+        'kode_pos',
+        'telepon',
+        'email',
+        'website',
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
     protected $casts = [
         'id' => 'integer',
     ];
-
-    public function negara(): BelongsTo
-    {
-        return $this->belongsTo(Negara::class);
-    }
-
-    public function provinsi(): BelongsTo
-    {
-        return $this->belongsTo(Provinsi::class);
-    }
-
-    public function kabupaten(): BelongsTo
-    {
-        return $this->belongsTo(Kabupaten::class);
-    }
-
-    public function kecamatan(): BelongsTo
-    {
-        return $this->belongsTo(Kecamatan::class);
-    }
-
-    public function kelurahan(): BelongsTo
-    {
-        return $this->belongsTo(Kelurahan::class);
-    }
 }

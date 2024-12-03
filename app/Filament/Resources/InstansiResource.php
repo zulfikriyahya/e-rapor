@@ -2,21 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\InstansiResource\Pages;
-use App\Models\Instansi;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Instansi;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\InstansiResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\InstansiResource\RelationManagers;
 
 class InstansiResource extends Resource
 {
     protected static ?string $model = Instansi::class;
-
-    protected static ?string $navigationGroup = 'Referensi';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -28,33 +27,23 @@ class InstansiResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('npsn')
                     ->required(),
-                Forms\Components\TextInput::make('logo')
-                    ->required(),
+                Forms\Components\TextInput::make('nss'),
+                Forms\Components\TextInput::make('logo'),
                 Forms\Components\TextInput::make('nama_kepala')
                     ->required(),
-                Forms\Components\TextInput::make('nip_kepala')
-                    ->required(),
-                Forms\Components\TextInput::make('tte_kepala')
-                    ->required(),
+                Forms\Components\TextInput::make('nip_kepala'),
+                Forms\Components\TextInput::make('tte_kepala'),
                 Forms\Components\TextInput::make('status')
                     ->required(),
                 Forms\Components\TextInput::make('alamat')
                     ->required(),
-                Forms\Components\Select::make('negara_id')
-                    ->relationship('negara', 'nama')
+                Forms\Components\TextInput::make('kode_pos')
                     ->required(),
-                Forms\Components\Select::make('provinsi_id')
-                    ->relationship('provinsi', 'nama')
-                    ->required(),
-                Forms\Components\Select::make('kabupaten_id')
-                    ->relationship('kabupaten', 'nama')
-                    ->required(),
-                Forms\Components\Select::make('kecamatan_id')
-                    ->relationship('kecamatan', 'nama')
-                    ->required(),
-                Forms\Components\Select::make('kelurahan_id')
-                    ->relationship('kelurahan', 'nama')
-                    ->required(),
+                Forms\Components\TextInput::make('telepon')
+                    ->tel(),
+                Forms\Components\TextInput::make('email')
+                    ->email(),
+                Forms\Components\TextInput::make('website'),
             ]);
     }
 
@@ -65,6 +54,8 @@ class InstansiResource extends Resource
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('npsn')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('nss')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('logo')
                     ->searchable(),
@@ -78,16 +69,14 @@ class InstansiResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('alamat')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('kelurahan.nama')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('kecamatan.nama')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('kabupaten.nama')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('provinsi.nama')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('negara.nama')
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('kode_pos')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('telepon')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('email')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('website')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -105,10 +94,9 @@ class InstansiResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -119,10 +107,19 @@ class InstansiResource extends Resource
             ]);
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageInstansis::route('/'),
+            'index' => Pages\ListInstansis::route('/'),
+            'create' => Pages\CreateInstansi::route('/create'),
+            'edit' => Pages\EditInstansi::route('/{record}/edit'),
         ];
     }
 

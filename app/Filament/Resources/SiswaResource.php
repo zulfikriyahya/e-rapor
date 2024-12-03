@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\SiswaResource\Pages;
+use App\Filament\Resources\SiswaResource\RelationManagers;
 use App\Models\Siswa;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -16,8 +17,6 @@ class SiswaResource extends Resource
 {
     protected static ?string $model = Siswa::class;
 
-    protected static ?string $navigationGroup = 'Manajemen Pengguna';
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -26,41 +25,55 @@ class SiswaResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nama')
                     ->required(),
-                Forms\Components\TextInput::make('nisn')
+                Forms\Components\TextInput::make('nik'),
+                Forms\Components\TextInput::make('nisn'),
+                Forms\Components\TextInput::make('nipd'),
+                Forms\Components\TextInput::make('tempat_lahir')
                     ->required(),
-                Forms\Components\TextInput::make('nipd')
+                Forms\Components\DatePicker::make('tanggal_lahir')
                     ->required(),
                 Forms\Components\TextInput::make('jenis_kelamin')
                     ->required(),
+                Forms\Components\TextInput::make('agama')
+                    ->required(),
                 Forms\Components\TextInput::make('golongan_darah')
                     ->required(),
-                Forms\Components\Select::make('kelas_id')
-                    ->relationship('kelas', 'id')
+                Forms\Components\TextInput::make('status_dalam_keluarga')
                     ->required(),
-                Forms\Components\TextInput::make('alamat')
+                Forms\Components\TextInput::make('anak_ke')
+                    ->required()
+                    ->numeric(),
+                Forms\Components\TextInput::make('alamat_siswa')
                     ->required(),
-                Forms\Components\Select::make('negara_id')
-                    ->relationship('negara', 'id')
+                Forms\Components\TextInput::make('telepon_siswa')
+                    ->tel(),
+                Forms\Components\TextInput::make('sekolah_asal'),
+                Forms\Components\TextInput::make('diterima_dikelas')
+                    ->required()
+                    ->numeric(),
+                Forms\Components\DatePicker::make('tanggal_diterima')
                     ->required(),
-                Forms\Components\Select::make('provinsi_id')
-                    ->relationship('provinsi', 'id')
+                Forms\Components\TextInput::make('nama_ayah')
                     ->required(),
-                Forms\Components\Select::make('kabupaten_id')
-                    ->relationship('kabupaten', 'id')
+                Forms\Components\TextInput::make('pekerjaan_ayah')
                     ->required(),
-                Forms\Components\Select::make('kecamatan_id')
-                    ->relationship('kecamatan', 'id')
+                Forms\Components\TextInput::make('nama_ibu')
                     ->required(),
-                Forms\Components\Select::make('kelurahan_id')
-                    ->relationship('kelurahan', 'id')
+                Forms\Components\TextInput::make('pekerjaan_ibu')
                     ->required(),
-                Forms\Components\Select::make('ekstrakurikuler_id')
-                    ->relationship('ekstrakurikuler', 'id')
+                Forms\Components\TextInput::make('alamat_orang_tua')
                     ->required(),
+                Forms\Components\TextInput::make('telepon_orang_tua')
+                    ->tel()
+                    ->required(),
+                Forms\Components\TextInput::make('nama_wali'),
+                Forms\Components\TextInput::make('pekerjaan_wali'),
+                Forms\Components\TextInput::make('alamat_wali'),
+                Forms\Components\TextInput::make('telepon_wali')
+                    ->tel(),
                 Forms\Components\TextInput::make('status')
                     ->required(),
-                Forms\Components\TextInput::make('foto')
-                    ->required(),
+                Forms\Components\TextInput::make('foto'),
             ]);
     }
 
@@ -70,30 +83,60 @@ class SiswaResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('nik')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('nisn')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('nipd')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('tempat_lahir')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('tanggal_lahir')
+                    ->date()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('jenis_kelamin')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('agama')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('golongan_darah')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('kelas.nama')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('alamat')
+                Tables\Columns\TextColumn::make('status_dalam_keluarga')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('negara.nama')
+                Tables\Columns\TextColumn::make('anak_ke')
+                    ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('provinsi.nama')
+                Tables\Columns\TextColumn::make('alamat_siswa')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('telepon_siswa')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('sekolah_asal')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('diterima_dikelas')
+                    ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('kabupaten.nama')
+                Tables\Columns\TextColumn::make('tanggal_diterima')
+                    ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('kecamatan.nama')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('kelurahan.nama')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('ekstrakurikuler.nama')
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('nama_ayah')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('pekerjaan_ayah')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('nama_ibu')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('pekerjaan_ibu')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('alamat_orang_tua')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('telepon_orang_tua')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('nama_wali')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('pekerjaan_wali')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('alamat_wali')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('telepon_wali')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('status')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('foto')
@@ -116,9 +159,6 @@ class SiswaResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -129,10 +169,19 @@ class SiswaResource extends Resource
             ]);
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageSiswas::route('/'),
+            'index' => Pages\ListSiswas::route('/'),
+            'create' => Pages\CreateSiswa::route('/create'),
+            'edit' => Pages\EditSiswa::route('/{record}/edit'),
         ];
     }
 

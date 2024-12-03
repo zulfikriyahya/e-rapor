@@ -1,108 +1,112 @@
 models:
   TahunPelajaran:
     nama: string
-    semester_id: integer
+    semester: enum:Ganjil,Genap
+    tempat_pembagian_rapor: string
+    tanggal_pembagian_rapor: date
     relationships:
-      belongsTo: Semester
-      hasMany: Penilaian, Nilai
-
-  Semester:
-    nama: string
-    relationships:
-      hasMany: TahunPelajaran, Penilaian, Nilai
-
-  Kelas:
-    nama: string
-    tingkat_id: integer
-    relationships:
-      belongsTo: Tingkat
-      hasMany: Nilai
+      hasMany: Kelas, Ekstrakurikuler
 
   Tingkat:
     nama: string
-    jenjang_id: integer
+    jenjang: enum:SD/MI,SMP/MTs,SMA/SMK/MA
     relationships:
-      belongsTo: Jenjang
       hasMany: Kelas
 
-  # Jenjang:
-  #   nama: string
-  #   relationships:
-  #     hasMany: Tingkat
-
-  Penilaian:
+  Kelas:
     nama: string
-    tahun_pelajaran_id: integer
-    semester_id: integer
+    wali_kelas: string
+    tingkat: string
+    tahun_pelajaran: string
     relationships:
-      belongsTo: TahunPelajaran, Semester
-      hasMany: Nilai
+      belongsTo: Guru, Tingkat, TahunPelajaran
+      hasMany: Pembelajaran
 
-  Nilai:
-    kode: string
-    siswa_id: integer
-    nilai_angka: float
-    nilai_huruf: string
-    nilai_ekstrakurikuler_angka: float
-    nilai_ekstrakurikuler_huruf: string
-    penilaian_id: integer
-    mata_pelajaran_id: integer
-    kelas_id: integer
-    tahun_pelajaran_id: integer
-    semester_id: integer
-    ekstrakurikuler_id: integer
+  Guru:
+    nama: string
+    nik: string nullable
+    nip: string nullable
+    nuptk: string nullable
+    tempat_lahir: string
+    tanggal_lahir: date
+    jenis_kelamin: enum:Laki-laki,Perempuan
+    alamat: string
+    telepon: string nullable
+    foto: string nullable
+    status: enum:Aktif,Nonaktif
     relationships:
-      belongsTo: Penilaian, MataPelajaran, Kelas, TahunPelajaran, Semester, Ekstrakurikuler
+      hasMany: Kelas, Pembelajaran, Ekstrakurikuler
+
+  KelompokMataPelajaran:
+    nama: string
+    kode: string
+    relationships:
+      hasMany: MataPelajaran
 
   MataPelajaran:
     nama: string
-    kode: bigInteger
+    kode: string
+    kelompok: string
     relationships:
-      hasMany: Nilai, Guru
+      belongsTo: KelompokMataPelajaran
+      hasMany: Pembelajaran
 
-  # Guru:
-  #   nama: string
-  #   foto: string
-  #   mata_pelajaran_id: integer foreign:mata_pelajaran.id
-  #   kelas_id: integer foreign:kelas.id
-  #   jabatan_id: integer foreign:jabatan.id
-  #   status: boolean
-  #   user_id: integer foreign:user.id
+  Pembelajaran:
+    kelas: string
+    mata_pelajaran: string
+    guru: string
+    relationships:
+      belongsTo: MataPelajaran, Guru, Kelas
+
+  Instansi:
+    nama: string
+    npsn: string
+    nss: string nullable
+    logo: string nullable
+    nama_kepala: string
+    nip_kepala: string nullable
+    tte_kepala: string nullable
+    status: enum:Negeri,Swasta
+    alamat: string
+    kode_pos: string
+    telepon: string nullable
+    email: string nullable
+    website: string nullable
+
+  Ekstrakurikuler:
+    nama: string
+    pembina: string
+    tahun_pelajaran: string
+    semester: enum:Ganjil,Genap
+    relationships:
+      belongsTo: Guru, TahunPelajaran
 
   Siswa:
     nama: string
-    nisn: string
-    nipd: string
-    jenis_kelamin: string
-    golongan_darah: string
-    kelas_id: integer foreign:kelas.id
-    tingkat_id: integer foreign:tingkat.id
-    jenjang_id: integer foreign:jenjang.id
-    alamat: string
-    negara_id: integer
-    provinsi_id: integer
-    kabupaten_id: integer
-    kecamatan_id: integer
-    kelurahan_id: integer
-    ekstrakurikuler_id: integer foreign:ekstrakurikuler.id
-    status: boolean
-    user_id: integer foreign:user.id
-    foto: string
-
-  # Ekstrakurikuler:
-  #   nama: string
-  #   guru_id: integer
-  #   relationships:
-  #     belongsTo: Guru
-  #     hasMany: Nilai
-
-  Jabatan:
-    nama: string
-    relationships:
-      hasMany: Guru
-
-  User:
-    nama: string
-    email: string
-    password: string
-    avatar: string foreign:guru.foto
+    nik: string nullable
+    nisn: string nullable
+    nipd: string nullable
+    tempat_lahir: string
+    tanggal_lahir: date
+    jenis_kelamin: enum:Laki-laki,Perempuan
+    agama: enum:Islam,"Kristen Protestan","Kristen Katholik","Hundu","Buddha","Konghucu"
+    golongan_darah: enum:A+,B+,AB+,O,A-,B-,AB-
+    status_dalam_keluarga: enum:"Anak Kandung","Anak Tiri"
+    anak_ke: integer
+    alamat_siswa: string
+    telepon_siswa: string nullable
+    sekolah_asal: string nullable
+    diterima_dikelas: integer
+    tanggal_diterima: date
+    nama_ayah: string
+    pekerjaan_ayah: string
+    nama_ibu: string
+    pekerjaan_ibu: string
+    alamat_orang_tua: string
+    telepon_orang_tua: string
+    nama_wali: string nullable
+    pekerjaan_wali: string nullable
+    alamat_wali: string nullable
+    telepon_wali: string nullable
+    status: enum:Aktif,Nonaktif
+    foto: string nullable

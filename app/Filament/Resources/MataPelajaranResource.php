@@ -2,21 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\MataPelajaranResource\Pages;
-use App\Models\MataPelajaran;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Models\MataPelajaran;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\MataPelajaranResource\Pages;
+use App\Filament\Resources\MataPelajaranResource\RelationManagers;
 
 class MataPelajaranResource extends Resource
 {
     protected static ?string $model = MataPelajaran::class;
-
-    protected static ?string $navigationGroup = 'Referensi';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -24,10 +23,20 @@ class MataPelajaranResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('kode')
-                    ->required(),
                 Forms\Components\TextInput::make('nama')
                     ->required(),
+                Forms\Components\TextInput::make('kode')
+                    ->required(),
+                Forms\Components\Select::make('kelompok_mata_pelajaran_id')
+                    ->relationship('kelompokMataPelajaran', 'nama')
+                    ->required()
+                    ->native(false)
+                    ->createOptionForm([
+                        Forms\Components\TextInput::make('nama')
+                            ->required(),
+                        Forms\Components\TextInput::make('kode')
+                            ->required(),
+                    ]),
             ]);
     }
 
@@ -35,10 +44,12 @@ class MataPelajaranResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('kode')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('kode')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('kelompokMataPelajaran.nama')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -57,9 +68,6 @@ class MataPelajaranResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -70,10 +78,19 @@ class MataPelajaranResource extends Resource
             ]);
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageMataPelajarans::route('/'),
+            'index' => Pages\ListMataPelajarans::route('/'),
+            'create' => Pages\CreateMataPelajaran::route('/create'),
+            'edit' => Pages\EditMataPelajaran::route('/{record}/edit'),
         ];
     }
 

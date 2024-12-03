@@ -2,21 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\TingkatResource\Pages;
-use App\Models\Tingkat;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Tingkat;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\TingkatResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\TingkatResource\RelationManagers;
 
 class TingkatResource extends Resource
 {
     protected static ?string $model = Tingkat::class;
-
-    protected static ?string $navigationGroup = 'Referensi';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -26,9 +25,14 @@ class TingkatResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nama')
                     ->required(),
-                Forms\Components\Select::make('jenjang_id')
-                    ->relationship('jenjang', 'nama')
-                    ->required(),
+                Forms\Components\Select::make('jenjang')
+                    ->required()
+                    ->native(false)
+                    ->options([
+                        'SD/MI',
+                        'SMP/MTs',
+                        'SMA/SMK/MA',
+                    ]),
             ]);
     }
 
@@ -38,9 +42,9 @@ class TingkatResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('jenjang.nama')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('jenjang')
+                    ->searchable()
+                    ->badge(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -59,9 +63,6 @@ class TingkatResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -72,10 +73,19 @@ class TingkatResource extends Resource
             ]);
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageTingkats::route('/'),
+            'index' => Pages\ListTingkats::route('/'),
+            'create' => Pages\CreateTingkat::route('/create'),
+            'edit' => Pages\EditTingkat::route('/{record}/edit'),
         ];
     }
 

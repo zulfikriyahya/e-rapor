@@ -2,22 +2,21 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
-use App\Models\User;
-use Filament\Tables;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Filament\Resources\Resource;
-use Filament\Tables\Actions\ActionGroup;
-use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
+use App\Models\User;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\UserResource\RelationManagers;
 
 class UserResource extends Resource
 {
-
     protected static ?string $model = User::class;
+
     protected static ?string $navigationGroup = 'Manajemen Pengguna';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -30,7 +29,7 @@ class UserResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('email')
                     ->email()
-                    ->rule(fn($record) => $record === null ? 'unique:users,email' : 'unique:users,email,' . $record->id)->dehydrateStateUsing(fn($state) => $state ? $state : null)
+                    ->rule(fn ($record) => $record === null ? 'unique:users,email' : 'unique:users,email,'.$record->id)->dehydrateStateUsing(fn ($state) => $state ? $state : null)
                     ->required(),
                 // Forms\Components\DateTimePicker::make('email_verified_at'),
                 // ->default(now())
@@ -38,8 +37,8 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('password')
                     ->label('Password')
                     ->password()
-                    ->required(fn($record) => $record === null) // Required only on create
-                    ->dehydrateStateUsing(fn($state, $record) => $state ? bcrypt($state) : $record->password),
+                    ->required(fn ($record) => $record === null) // Required only on create
+                    ->dehydrateStateUsing(fn ($state, $record) => $state ? bcrypt($state) : $record->password),
                 Forms\Components\Select::make('roles')
                     ->relationship('roles', 'name')
                     ->multiple()
@@ -103,7 +102,7 @@ class UserResource extends Resource
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
-                ])
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

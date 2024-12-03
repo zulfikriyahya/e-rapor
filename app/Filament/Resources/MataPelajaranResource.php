@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\NegaraResource\Pages;
-use App\Models\Negara;
+use App\Filament\Resources\MataPelajaranResource\Pages;
+use App\Models\MataPelajaran;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,11 +12,11 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class NegaraResource extends Resource
+class MataPelajaranResource extends Resource
 {
-    protected static ?string $model = Negara::class;
+    protected static ?string $model = MataPelajaran::class;
 
-    protected static ?string $navigationGroup = 'Wilayah';
+    protected static ?string $navigationGroup = 'Referensi';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -24,6 +24,8 @@ class NegaraResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\TextInput::make('kode')
+                    ->required(),
                 Forms\Components\TextInput::make('nama')
                     ->required(),
             ]);
@@ -33,6 +35,8 @@ class NegaraResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('kode')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('deleted_at')
@@ -69,7 +73,7 @@ class NegaraResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageNegaras::route('/'),
+            'index' => Pages\ManageMataPelajarans::route('/'),
         ];
     }
 

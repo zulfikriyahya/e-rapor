@@ -2,20 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
-use Filament\Tables;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
+use App\Filament\Resources\EkstrakurikulerResource\Pages;
 use App\Models\Ekstrakurikuler;
+use Filament\Forms;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\EkstrakurikulerResource\Pages;
-use App\Filament\Resources\EkstrakurikulerResource\RelationManagers;
 
 class EkstrakurikulerResource extends Resource
 {
     protected static ?string $model = Ekstrakurikuler::class;
+
     protected static ?string $navigationGroup = 'Referensi';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -25,6 +25,9 @@ class EkstrakurikulerResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nama')
+                    ->required(),
+                Forms\Components\Select::make('guru_id')
+                    ->relationship('guru', 'nama')
                     ->required(),
                 Forms\Components\Select::make('tahun_pelajaran_id')
                     ->relationship('tahunPelajaran', 'nama')
@@ -40,6 +43,8 @@ class EkstrakurikulerResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('guru.nama')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('tahunPelajaran.nama')
                     ->sortable(),

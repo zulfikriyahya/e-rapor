@@ -5,31 +5,32 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
 
-class Siswa extends Model
+class Instansi extends Model
 {
     use HasFactory, HasRoles, SoftDeletes;
 
     protected $fillable = [
         'nama',
-        'nisn',
-        'nipd',
-        'golongan_darah',
+        'npsn',
+        'nama_kepala',
+        'nip_kepala',
+        'tte_kepala',
         'alamat',
         'negara_id',
         'provinsi_id',
         'kabupaten_id',
         'kecamatan_id',
         'kelurahan_id',
-        'foto',
-        'jenis_kelamin',
+        'logo',
         'status',
     ];
 
-    protected $casts = ['id' => 'integer'];
+    protected $casts = [
+        'id' => 'integer',
+    ];
 
     public function negara(): BelongsTo
     {
@@ -54,20 +55,5 @@ class Siswa extends Model
     public function kelurahan(): BelongsTo
     {
         return $this->belongsTo(Kelurahan::class);
-    }
-
-    public function kelas(): BelongsTo
-    {
-        return $this->belongsTo(Kelas::class);
-    }
-
-    public function ekstrakurikuler(): BelongsTo
-    {
-        return $this->belongsTo(Ekstrakurikuler::class);
-    }
-
-    public function nilai(): HasMany
-    {
-        return $this->hasMany(Nilai::class);
     }
 }

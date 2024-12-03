@@ -21,14 +21,14 @@ return [
 
     'super_admin' => [
         'enabled' => true,
-        'name' => 'Super Admin',
-        'define_via_gate' => true,
+        'name' => 'super_admin',
+        'define_via_gate' => false,
         'intercept_gate' => 'before', // after
     ],
 
     'panel_user' => [
         'enabled' => true,
-        'name' => 'Panel User',
+        'name' => 'panel_user',
     ],
 
     'permission_prefixes' => [
@@ -72,8 +72,7 @@ return [
         ],
 
         'widgets' => [
-            'AccountWidget',
-            'FilamentInfoWidget',
+            'AccountWidget', 'FilamentInfoWidget',
         ],
 
         'resources' => [],

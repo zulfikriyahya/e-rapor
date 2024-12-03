@@ -25,10 +25,10 @@ models:
       belongsTo: Jenjang
       hasMany: Kelas
 
-  Jenjang:
-    nama: string
-    relationships:
-      hasMany: Tingkat
+  # Jenjang:
+  #   nama: string
+  #   relationships:
+  #     hasMany: Tingkat
 
   Penilaian:
     nama: string
@@ -58,16 +58,16 @@ models:
     nama: string
     kode: bigInteger
     relationships:
-      hasMany: Nilai
+      hasMany: Nilai, Guru
 
-  Guru:
-    nama: string
-    foto: string
-    mata_pelajaran_id: integer foreign:mata_pelajaran.id
-    kelas_id: integer foreign:kelas.id
-    jabatan_id: integer foreign:jabatan.id
-    status: boolean
-    user_id: integer foreign:user.id
+  # Guru:
+  #   nama: string
+  #   foto: string
+  #   mata_pelajaran_id: integer foreign:mata_pelajaran.id
+  #   kelas_id: integer foreign:kelas.id
+  #   jabatan_id: integer foreign:jabatan.id
+  #   status: boolean
+  #   user_id: integer foreign:user.id
 
   Siswa:
     nama: string
@@ -89,12 +89,12 @@ models:
     user_id: integer foreign:user.id
     foto: string
 
-  Ekstrakurikuler:
-    nama: string
-    guru_id: integer
-    relationships:
-      belongsTo: Guru
-      hasMany: Nilai
+  # Ekstrakurikuler:
+  #   nama: string
+  #   guru_id: integer
+  #   relationships:
+  #     belongsTo: Guru
+  #     hasMany: Nilai
 
   Jabatan:
     nama: string

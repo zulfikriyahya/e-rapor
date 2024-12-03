@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\SiswaResource\Pages;
-use App\Models\Siswa;
+use App\Filament\Resources\InstansiResource\Pages;
+use App\Models\Instansi;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,11 +12,11 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class SiswaResource extends Resource
+class InstansiResource extends Resource
 {
-    protected static ?string $model = Siswa::class;
+    protected static ?string $model = Instansi::class;
 
-    protected static ?string $navigationGroup = 'Manajemen Pengguna';
+    protected static ?string $navigationGroup = 'Referensi';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -26,40 +26,34 @@ class SiswaResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('nama')
                     ->required(),
-                Forms\Components\TextInput::make('nisn')
+                Forms\Components\TextInput::make('npsn')
                     ->required(),
-                Forms\Components\TextInput::make('nipd')
+                Forms\Components\TextInput::make('logo')
                     ->required(),
-                Forms\Components\TextInput::make('jenis_kelamin')
+                Forms\Components\TextInput::make('nama_kepala')
                     ->required(),
-                Forms\Components\TextInput::make('golongan_darah')
+                Forms\Components\TextInput::make('nip_kepala')
                     ->required(),
-                Forms\Components\Select::make('kelas_id')
-                    ->relationship('kelas', 'id')
+                Forms\Components\TextInput::make('tte_kepala')
+                    ->required(),
+                Forms\Components\TextInput::make('status')
                     ->required(),
                 Forms\Components\TextInput::make('alamat')
                     ->required(),
                 Forms\Components\Select::make('negara_id')
-                    ->relationship('negara', 'id')
+                    ->relationship('negara', 'nama')
                     ->required(),
                 Forms\Components\Select::make('provinsi_id')
-                    ->relationship('provinsi', 'id')
+                    ->relationship('provinsi', 'nama')
                     ->required(),
                 Forms\Components\Select::make('kabupaten_id')
-                    ->relationship('kabupaten', 'id')
+                    ->relationship('kabupaten', 'nama')
                     ->required(),
                 Forms\Components\Select::make('kecamatan_id')
-                    ->relationship('kecamatan', 'id')
+                    ->relationship('kecamatan', 'nama')
                     ->required(),
                 Forms\Components\Select::make('kelurahan_id')
-                    ->relationship('kelurahan', 'id')
-                    ->required(),
-                Forms\Components\Select::make('ekstrakurikuler_id')
-                    ->relationship('ekstrakurikuler', 'id')
-                    ->required(),
-                Forms\Components\TextInput::make('status')
-                    ->required(),
-                Forms\Components\TextInput::make('foto')
+                    ->relationship('kelurahan', 'nama')
                     ->required(),
             ]);
     }
@@ -70,34 +64,30 @@ class SiswaResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('nama')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('nisn')
+                Tables\Columns\TextColumn::make('npsn')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('nipd')
+                Tables\Columns\TextColumn::make('logo')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('jenis_kelamin')
+                Tables\Columns\TextColumn::make('nama_kepala')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('golongan_darah')
+                Tables\Columns\TextColumn::make('nip_kepala')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('kelas.nama')
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('tte_kepala')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('alamat')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('negara.nama')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('provinsi.nama')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('kabupaten.nama')
+                Tables\Columns\TextColumn::make('kelurahan.nama')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('kecamatan.nama')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('kelurahan.nama')
+                Tables\Columns\TextColumn::make('kabupaten.nama')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('ekstrakurikuler.nama')
+                Tables\Columns\TextColumn::make('provinsi.nama')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('foto')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('negara.nama')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -132,7 +122,7 @@ class SiswaResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageSiswas::route('/'),
+            'index' => Pages\ManageInstansis::route('/'),
         ];
     }
 

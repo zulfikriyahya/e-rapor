@@ -2,14 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\SiswaResource\Pages;
-use App\Models\Siswa;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Siswa;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use App\Filament\Exports\SiswaExporter;
+use App\Filament\Imports\SiswaImporter;
+use Filament\Tables\Actions\ExportAction;
+use Filament\Tables\Actions\ImportAction;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Actions\Exports\Models\Export;
+use Filament\Tables\Actions\ExportBulkAction;
+use App\Filament\Resources\SiswaResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SiswaResource extends Resource
@@ -158,6 +164,9 @@ class SiswaResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                ExportAction::make()
+                    ->exporter(SiswaExporter::class)
+                    ->fileName(fn(Export $export): string => "siswa-{$export->getKey()}.csv"),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -165,6 +174,12 @@ class SiswaResource extends Resource
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
+                ExportBulkAction::make()
+                    ->exporter(SiswaExporter::class),
+            ])
+            ->headerActions([
+                ImportAction::make()
+                    ->importer(SiswaImporter::class),
             ]);
     }
 

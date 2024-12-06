@@ -2,20 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use Filament\Forms;
-use Filament\Tables;
-use App\Models\Siswa;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Filament\Resources\Resource;
 use App\Filament\Exports\SiswaExporter;
 use App\Filament\Imports\SiswaImporter;
-use Filament\Tables\Actions\ExportAction;
-use Filament\Tables\Actions\ImportAction;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Actions\Exports\Models\Export;
-use Filament\Tables\Actions\ExportBulkAction;
 use App\Filament\Resources\SiswaResource\Pages;
+use App\Models\Siswa;
+use Filament\Actions\Exports\Models\Export;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Actions\ExportAction;
+use Filament\Tables\Actions\ExportBulkAction;
+use Filament\Tables\Actions\ImportAction;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class SiswaResource extends Resource
@@ -110,6 +110,11 @@ class SiswaResource extends Resource
                 Tables\Columns\TextColumn::make('anak_ke')
                     ->numeric()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('jumlah_saudara')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('cita_cita')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('alamat_siswa')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('telepon_siswa')
@@ -166,7 +171,7 @@ class SiswaResource extends Resource
                 Tables\Actions\EditAction::make(),
                 ExportAction::make()
                     ->exporter(SiswaExporter::class)
-                    ->fileName(fn(Export $export): string => "siswa-{$export->getKey()}.csv"),
+                    ->fileName(fn (Export $export): string => "siswa-{$export->getKey()}.csv"),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

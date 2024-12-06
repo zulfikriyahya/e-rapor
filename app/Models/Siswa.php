@@ -29,6 +29,8 @@ class Siswa extends Model
         'golongan_darah',
         'status_dalam_keluarga',
         'anak_ke',
+        'cita_cita',
+        'jumlah_saudara',
         'alamat_siswa',
         'telepon_siswa',
         'sekolah_asal',

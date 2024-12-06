@@ -2,15 +2,18 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\User;
 use Filament\Tables;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Filament\Resources\Resource;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class UserResource extends Resource
@@ -29,7 +32,7 @@ class UserResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('email')
                     ->email()
-                    ->rule(fn ($record) => $record === null ? 'unique:users,email' : 'unique:users,email,'.$record->id)->dehydrateStateUsing(fn ($state) => $state ? $state : null)
+                    ->rule(fn($record) => $record === null ? 'unique:users,email' : 'unique:users,email,' . $record->id)->dehydrateStateUsing(fn($state) => $state ? $state : null)
                     ->required(),
                 // Forms\Components\DateTimePicker::make('email_verified_at'),
                 // ->default(now())
@@ -37,8 +40,8 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('password')
                     ->label('Password')
                     ->password()
-                    ->required(fn ($record) => $record === null) // Required only on create
-                    ->dehydrateStateUsing(fn ($state, $record) => $state ? bcrypt($state) : $record->password),
+                    ->required(fn($record) => $record === null) // Required only on create
+                    ->dehydrateStateUsing(fn($state, $record) => $state ? bcrypt($state) : $record->password),
                 Forms\Components\Select::make('roles')
                     ->relationship('roles', 'name')
                     ->multiple()
@@ -55,7 +58,7 @@ class UserResource extends Resource
                     ])
                     ->maxSize(1024)
                     ->minSize(10)
-                    ->directory('/avatar/')
+                    ->directory('/avatar')
                     ->fetchFileInformation(false),
             ]);
     }
@@ -102,6 +105,17 @@ class UserResource extends Resource
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\Action::make('pdf')
+                        ->label('PDF')
+                        ->color('success')
+                        ->icon('heroicon-o-document')
+                        ->action(function (Model $record) {
+                            return response()->streamDownload(function () use ($record) {
+                                echo Pdf::loadHtml(
+                                    Blade::render('/pdf/user', ['record' => $record])
+                                )->stream();
+                            }, $record->name . '.pdf');
+                        }),
                 ]),
             ])
             ->bulkActions([

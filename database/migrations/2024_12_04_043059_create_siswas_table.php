@@ -20,10 +20,12 @@ return new class extends Migration
             $table->string('tempat_lahir');
             $table->date('tanggal_lahir');
             $table->string('jenis_kelamin')->enum('Laki-laki', 'Perempuan');
-            $table->string('agama')->enum('Islam', 'Kristen Protestan', 'Kristen Katholik', 'Hundu', 'Buddha', 'Konghucu');
+            $table->string('agama')->enum('Islam', 'Kristen Protestan', 'Kristen Katholik', 'Hindu', 'Buddha', 'Konghucu');
             $table->string('golongan_darah')->enum('A+', 'B+', 'AB+', 'O', 'A-', 'B-', 'AB-');
             $table->string('status_dalam_keluarga')->enum('Anak Kandung', 'Anak Tiri');
             $table->integer('anak_ke');
+            $table->integer('jumlah_saudara');
+            $table->string('cita_cita');
             $table->string('alamat_siswa');
             $table->string('telepon_siswa')->nullable();
             $table->string('sekolah_asal')->nullable();

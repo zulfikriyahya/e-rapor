@@ -7,6 +7,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "barryvdh/laravel-dompdf": "^3.0",
         "bezhansalleh/filament-shield": "^3.3",
         "filament/filament": "^3.2",
         "laravel/framework": "^11.31",
@@ -42,6 +43,11 @@
             "@php artisan package:discover --ansi",
             "@php artisan filament:upgrade"
         ],
+        "phpstan": "vendor/bin/phpstan analyse",
+        "pint": "vendor/bin/pint",
+        "amfs": "php artisan migrate:fresh --seed",
+        "gen": "php artisan shield:generate --all",
+        "ser": "@php artisan serve",
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],

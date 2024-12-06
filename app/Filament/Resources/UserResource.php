@@ -116,7 +116,7 @@ class UserResource extends Resource
                                 )->stream();
                             }, $record->name . '.pdf');
                         }),
-                ]),
+                ])->visible(fn() => auth()->user()->is_admin), // Hanya dapat dilihat admin user
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
